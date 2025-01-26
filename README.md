@@ -16,7 +16,7 @@ composer install
 npm install
 npm run build
 
-php artisan migrate (create database folder)
+php artisan migrate (If the SQLite database does not exist, you will be prompted to create it. Type 'yes' to automatically generate the database file)
 php artisan migrate:fresh
 php artisan db:seed
 ```
