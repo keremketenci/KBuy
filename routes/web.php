@@ -21,7 +21,7 @@ Route::get('/', function () {
 // Product
 Route::get('/products', [ProductController::class, 'Products']);
 
-Route::get('/products/product/{id}', action: [ProductController::class, 'ProductDetails'])->name('products.details');
+Route::get('/products/product/{id}', action: [ProductController::class, 'ProductDetails'])->name('product.details');
 
 // ----------------------------------------------------------------
 // Seller
