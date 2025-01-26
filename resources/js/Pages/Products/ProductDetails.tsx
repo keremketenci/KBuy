@@ -16,9 +16,16 @@ export default function ProductDetails({
     const { product } = usePage<PageProps<{ product: Product }>>().props;
     const [productData, setProductData] = useState<typeProduct[] | null>(null);
     const [inCart, setInCart] = useState(false);
+    const { auth } = usePage().props;
+    const isLoggedIn = !!auth.user;
 
     useEffect(() => {
         const checkInCart = async () => {
+            if (!isLoggedIn) {
+                console.log('User not logged in. Skipping cart check.');
+                return;
+            }
+
             try {
                 const response = await fetch(`/cart/is-in-cart/${product.id}`);
                 const data = await response.json();
@@ -75,23 +82,30 @@ export default function ProductDetails({
                         <div className="mt-6">
                             <Button
                                 className={`px-6 py-2 text-white transition rounded-md ${
-                                    inCart || product.stock === 0
+                                    !isLoggedIn
                                         ? 'bg-gray-400 cursor-not-allowed'
-                                        : 'bg-blue-500 hover:bg-blue-600'
+                                        : inCart || product.stock === 0
+                                          ? 'bg-gray-400 cursor-not-allowed'
+                                          : 'bg-blue-500 hover:bg-blue-600'
                                 }`}
-                                onClick={() => handleAddToCart(product.id)}
+                                onClick={() =>
+                                    isLoggedIn && handleAddToCart(product.id)
+                                } // Sadece giriş yapılmışsa işlevi çağır
                                 disabled={
+                                    !isLoggedIn ||
                                     inCart ||
                                     product.stock === 0 ||
                                     (cartItems.get(product.id) ?? 0) >=
                                         product.stock
                                 }
                             >
-                                {inCart
-                                    ? 'Already in Cart'
-                                    : product.stock === 0
-                                      ? 'Out of Stock'
-                                      : 'Add to Cart'}
+                                {!isLoggedIn
+                                    ? 'Not Logged In' // Giriş yapılmamışsa bu metni göster
+                                    : inCart
+                                      ? 'Already in Cart'
+                                      : product.stock === 0
+                                        ? 'Out of Stock'
+                                        : 'Add to Cart'}
                             </Button>
                         </div>
 

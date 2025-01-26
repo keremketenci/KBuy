@@ -1,6 +1,5 @@
 'use client';
 import { Product } from '@/types';
-import { Inertia } from '@inertiajs/inertia';
 import { ColumnDef } from '@tanstack/react-table';
 import { ArrowUpDown, MoreHorizontal } from 'lucide-react';
 // components ui
@@ -64,15 +63,11 @@ export const columnsTable: ColumnDef<ProductsTable>[] = [
                             Copy Product Id
                         </DropdownMenuItem>
                         <DropdownMenuSeparator />
-                        <DropdownMenuItem
-                            onClick={() => {
-                                Inertia.visit(
-                                    `/products/product-${row.original.id}`,
-                                );
-                            }}
-                        >
-                            View product details
-                        </DropdownMenuItem>
+                        <Link href={`/products/product/${row.original.id}`}>
+                            <DropdownMenuItem>
+                                View product details
+                            </DropdownMenuItem>
+                        </Link>
                         <Link
                             href={`/sellers/seller/${row.original.seller.id}`}
                         >
